@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ロール巻き計算機 / Máy tính cuộn</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .language-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            border-radius: 25px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn.active {
+            background: white;
+            color: #2c3e50;
+        }
+        
+        .container {
+            flex: 1;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .info-box p {
+            color: #2c3e50;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .diagram-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .diagram-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        svg {
+            width: 100%;
+            height: auto;
+        }
+        
+        .dimension-line {
+            stroke: #e74c3c;
+            stroke-width: 2;
+            fill: none;
+        }
+        
+        .dimension-arrow {
+            fill: #e74c3c;
+        }
+        
+        .roll-fill {
+            fill: #ecf0f1;
+            stroke: #34495e;
+            stroke-width: 2;
+        }
+        
+        .core-fill {
+            fill: #bdc3c7;
+            stroke: #34495e;
+            stroke-width: 2;
+        }
+        
+        .input-box {
+            position: absolute;
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+        }
+        
+        .input-box.d-box {
+            border-color: #e74c3c;
+        }
+        
+        .input-box label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+        
+        .input-box input {
+            width: 70px;
+            padding: 6px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+        
+        .input-box input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+        }
+        
+        .input-box .unit {
+            font-size: 11px;
+            color: #666;
+            margin-top: 2px;
+        }
+        
+        .t-input-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid #95a5a6;
+        }
+        
+        .t-input-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .t-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .t-input {
+            width: 100px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #95a5a6;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(39, 174, 96, 0.3);
+            margin-top: 20px;
+        }
+        
+        .calculate-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(39, 174, 96, 0.4);
+        }
+        
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .result-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .result-section.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .result-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .result-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: #27ae60;
+            text-align: center;
+            padding: 20px;
+            background: #f0f9ff;
+            border-radius: 8px;
+            border: 2px solid #27ae60;
+        }
+        
+        .formula {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            border-left: 4px solid #3498db;
+        }
+        
+        .error {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 2px;
+            display: none;
+            text-align: center;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px;
+            }
+            
+            .language-switch {
+                position: static;
+                margin-top: 10px;
+                justify-content: center;
+            }
+            
+            .input-box {
+                min-width: 70px;
+            }
+            
+            .input-box input {
+                width: 60px;
+                font-size: 14px;
+            }
+            
+            .result-value {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="lang-text" data-ja="ロール巻き メートル数計算機" data-vi="Máy tính mét cuộn">ロール巻き メートル数計算機</h1>
+        <div class="language-switch">
+            <button class="lang-btn active" onclick="setLanguage('ja')">日本語</button>
+            <button class="lang-btn" onclick="setLanguage('vi')">Tiếng Việt</button>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="info-box">
+            <p class="lang-text" 
+               data-ja="巻き端部の面積を計算し、フィルムの厚さから巻き長を算出します。"
+               data-vi="Tính diện tích mặt cuộn và tính chiều dài cuộn từ độ dày của phim.">
+                巻き端部の面積を計算し、フィルムの厚さから巻き長を算出します。
+            </p>
+        </div>
+        
+        <div class="diagram-section">
+            <div class="diagram-container">
+                <svg viewBox="0 0 600 350" xmlns="http://www.w3.org/2000/svg">
+                    <!-- ロール全体 -->
+                    <circle cx="300" cy="175" r="120" class="roll-fill"/>
+                    
+                    <!-- コア -->
+                    <circle cx="300" cy="175" r="45" class="core-fill"/>
+                    
+                    <!-- D寸法線（巻き厚さ） -->
+                    <line x1="345" y1="175" x2="420" y2="175" class="dimension-line"/>
+                    <line x1="345" y1="168" x2="345" y2="182" class="dimension-line"/>
+                    <line x1="420" y1="168" x2="420" y2="182" class="dimension-line"/>
+                    <!-- 矢印 -->
+                    <path d="M 352 175 L 359 168 L 359 182 Z" class="dimension-arrow"/>
+                    <path d="M 413 175 L 406 168 L 406 182 Z" class="dimension-arrow"/>
+                    
+                    <!-- d寸法線（コア外径） -->
+                    <line x1="255" y1="280" x2="345" y2="280" class="dimension-line" stroke="#3498db"/>
+                    <line x1="255" y1="273" x2="255" y2="287" class="dimension-line" stroke="#3498db"/>
+                    <line x1="345" y1="273" x2="345" y2="287" class="dimension-line" stroke="#3498db"/>
+                    <!-- 矢印 -->
+                    <path d="M 262 280 L 269 273 L 269 287 Z" fill="#3498db"/>
+                    <path d="M 338 280 L 331 273 L 331 287 Z" fill="#3498db"/>
+                    
+                    <!-- 補助線 -->
+                    <line x1="255" y1="175" x2="255" y2="280" stroke="#ccc" stroke-width="1" stroke-dasharray="3,3"/>
+                    <line x1="345" y1="175" x2="345" y2="280" stroke="#ccc" stroke-width="1" stroke-dasharray="3,3"/>
+                    
+                    <!-- ラベル -->
+                    <text x="300" y="30" style="font-size: 16px; fill: #666; text-anchor: middle;" 
+                          class="lang-text" data-ja="断面図" data-vi="Mặt cắt ngang">断面図</text>
+                </svg>
+                
+                <!-- D入力ボックス -->
+                <div class="input-box d-box" style="top: 150px; right: 80px;">
+                    <label class="lang-text" data-ja="D: 巻き厚さ" data-vi="D: Độ dày cuộn">D: 巻き厚さ</label>
+                    <input type="number" id="D" placeholder="62" step="0.1" inputmode="decimal">
+                    <div class="unit">mm</div>
+                    <div class="error" id="D-error"></div>
+                </div>
+                
+                <!-- d入力ボックス -->
+                <div class="input-box" style="top: 250px; left: 80px;">
+                    <label class="lang-text" data-ja="d: コア外径" data-vi="d: Đường kính lõi">d: コア外径</label>
+                    <input type="number" id="d" placeholder="76" step="0.1" inputmode="decimal">
+                    <div class="unit">mm</div>
+                    <div class="error" id="d-error"></div>
+                </div>
+                
+                <!-- T入力セクション -->
+                <div class="t-input-section">
+                    <div class="t-input-wrapper">
+                        <span class="t-label lang-text" data-ja="T: フィルム厚" data-vi="T: Độ dày phim">T: フィルム厚</span>
+                        <input type="number" class="t-input" id="T" placeholder="0.025" step="0.001" inputmode="decimal">
+                        <span class="unit">mm</span>
+                    </div>
+                    <div class="error" id="T-error" style="text-align: center; margin-top: 5px;"></div>
+                </div>
+            </div>
+            
+            <button class="calculate-btn lang-text" onclick="calculate()"
+                    data-ja="計算する" data-vi="Tính toán">計算する</button>
+        </div>
+        
+        <div class="result-section" id="result">
+            <div class="result-title lang-text" data-ja="巻き長 (M)" data-vi="Chiều dài cuộn (M)">巻き長 (M)</div>
+            <div class="result-value" id="result-value">0 m</div>
+            <div class="formula">
+                <span class="lang-text" data-ja="計算式" data-vi="Công thức">計算式</span>: M = π/4 × ((d + 2D)² - d²) / T
+                <br><small class="lang-text" 
+                          data-ja="（D: 巻き厚さ、d: コア外径、T: フィルム厚）"
+                          data-vi="(D: Độ dày cuộn, d: Đường kính lõi, T: Độ dày phim)">
+                    （D: 巻き厚さ、d: コア外径、T: フィルム厚）
+                </small>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentLang = 'ja';
+        
+        const errorMessages = {
+            ja: {
+                required: '値を入力してください',
+                positive: '0より大きい値を入力してください',
+                dError: '巻き厚さは0より大きくしてください'
+            },
+            vi: {
+                required: 'Vui lòng nhập giá trị',
+                positive: 'Vui lòng nhập giá trị lớn hơn 0',
+                dError: 'Độ dày cuộn phải lớn hơn 0'
+            }
+        };
+        
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // ボタンのアクティブ状態を更新
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // テキストを更新
+            document.querySelectorAll('.lang-text').forEach(element => {
+                const text = element.getAttribute(`data-${lang}`);
+                if (text) {
+                    element.textContent = text;
+                }
+            });
+        }
+        
+        function showError(inputId, messageKey) {
+            const errorElement = document.getElementById(`${inputId}-error`);
+            errorElement.textContent = errorMessages[currentLang][messageKey];
+            errorElement.style.display = 'block';
+        }
+        
+        function calculate() {
+            // 入力値を取得
+            const D = parseFloat(document.getElementById('D').value);
+            const d = parseFloat(document.getElementById('d').value);
+            const T = parseFloat(document.getElementById('T').value);
+            
+            // エラーをリセット
+            document.querySelectorAll('.error').forEach(e => {
+                e.style.display = 'none';
+                e.textContent = '';
+            });
+            
+            // 入力値の検証
+            let hasError = false;
+            
+            if (isNaN(D) || D <= 0) {
+                showError('D', isNaN(D) ? 'required' : 'positive');
+                hasError = true;
+            }
+            
+            if (isNaN(d) || d <= 0) {
+                showError('d', isNaN(d) ? 'required' : 'positive');
+                hasError = true;
+            }
+            
+            if (isNaN(T) || T <= 0) {
+                showError('T', isNaN(T) ? 'required' : 'positive');
+                hasError = true;
+            }
+            
+            if (hasError) {
+                document.getElementById('result').classList.remove('show');
+                return;
+            }
+            
+            // 計算実行
+            const totalDiameter = d + 2 * D;
+            const M_mm = (Math.PI / 4) * (totalDiameter * totalDiameter - d * d) / T;
+            const M = M_mm / 1000; // mmからmに変換
+            
+            // 結果を表示（小数点第1位まで）
+            document.getElementById('result-value').textContent = M.toFixed(1) + ' m';
+            document.getElementById('result').classList.add('show');
+            
+            // 結果セクションまでスクロール
+            setTimeout(() => {
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+        
+        // Enterキーで計算実行
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculate();
+                }
+            });
+        });
+        
+        // ページ読み込み時にフォーカス
+        window.addEventListener('load', function() {
+            document.getElementById('D').focus();
+        });
+    </script>
+</body>
+</html>
