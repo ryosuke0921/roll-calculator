@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ロール巻き計算機 / Máy tính cuộn</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
         * {
             margin: 0;
@@ -260,10 +264,10 @@
 </head>
 <body>
     <header>
-        <h1 class="lang-text" data-ja="ロール巻き計算機" data-vi="Máy tính mét cuộn">ロール巻き計算機</h1>
+        <h1 class="lang-text" data-ja="ロール巻き計算機" data-vi="Máy tính mét cuộn">Máy tính mét cuộn</h1>
         <div class="language-switch">
-            <button class="lang-btn active" onclick="setLanguage('ja')">日本語</button>
-            <button class="lang-btn" onclick="setLanguage('vi')">Tiếng Việt</button>
+            <button class="lang-btn" onclick="setLanguage('ja')">日本語</button>
+            <button class="lang-btn active" onclick="setLanguage('vi')">Tiếng Việt</button>
         </div>
     </header>
     
@@ -308,7 +312,7 @@
                             <input type="number" id="D" placeholder="62" step="0.1" inputmode="decimal">
                             <span class="unit">mm</span>
                         </div>
-                        <span class="input-description lang-text" data-ja="巻き厚さ" data-vi="Độ dày cuộn">巻き厚さ</span>
+                        <span class="input-description lang-text" data-ja="巻き厚さ" data-vi="Độ dày cuộn">Độ dày cuộn</span>
                         <div class="error" id="D-error"></div>
                     </div>
                     
@@ -318,7 +322,7 @@
                             <input type="number" id="d" placeholder="76" step="0.1" inputmode="decimal">
                             <span class="unit">mm</span>
                         </div>
-                        <span class="input-description lang-text" data-ja="コア外径" data-vi="Đường kính lõi">コア外径</span>
+                        <span class="input-description lang-text" data-ja="コア外径" data-vi="Đường kính lõi">Đường kính lõi</span>
                         <div class="error" id="d-error"></div>
                     </div>
                     
@@ -328,27 +332,24 @@
                             <input type="number" id="T" placeholder="0.025" step="0.001" inputmode="decimal">
                             <span class="unit">mm</span>
                         </div>
-                        <span class="input-description lang-text" data-ja="フィルム厚" data-vi="Độ dày phim">フィルム厚</span>
+                        <span class="input-description lang-text" data-ja="フィルム厚" data-vi="Độ dày phim">Độ dày phim</span>
                         <div class="error" id="T-error"></div>
                     </div>
                 </div>
             </div>
             
             <button class="calculate-btn lang-text" onclick="calculate()"
-                    data-ja="計算する" data-vi="Tính toán">計算する</button>
+                    data-ja="計算する" data-vi="Tính toán">Tính toán</button>
             
             <div class="result-section" id="result">
-                <div class="result-label lang-text" data-ja="巻き長 (M)" data-vi="Chiều dài cuộn (M)">巻き長 (M)</div>
+                <div class="result-label lang-text" data-ja="巻き長 (M)" data-vi="Chiều dài cuộn (M)">Chiều dài cuộn (M)</div>
                 <div class="result-value" id="result-value">0 m</div>
-                <div class="formula">
-                    M = π/4 × ((d + 2D)² - d²) / T
-                </div>
             </div>
         </div>
     </div>
     
     <script>
-        let currentLang = 'ja';
+        let currentLang = 'vi';  // ベトナム語をデフォルトに
         
         const errorMessages = {
             ja: {
@@ -415,9 +416,9 @@
                 return;
             }
             
-            // 計算実行（mmからmに変換）
-            const totalDiameter = d + 2 * D;
-            const M_mm = (Math.PI / 4) * (totalDiameter * totalDiameter - d * d) / T;
+            // 計算実行（新しい簡潔な式）
+            // M = ((d+D)*D*π)/T をmmからmに変換
+            const M_mm = ((d + D) * D * Math.PI) / T;
             const M = M_mm / 1000;
             
             document.getElementById('result-value').textContent = M.toFixed(1) + ' m';
@@ -437,6 +438,11 @@
         window.addEventListener('load', function() {
             document.getElementById('D').focus();
         });
+        
+        // Service Worker登録（PWA対応）
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
     </script>
 </body>
 </html>
