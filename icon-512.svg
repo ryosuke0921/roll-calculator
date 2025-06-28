@@ -1,8 +1,8 @@
-<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
   <rect width="512" height="512" fill="#2c3e50" rx="50"/>
-  <g transform="translate(256, 220)">
-    <ellipse cx="0" cy="0" rx="120" ry="100" fill="#3498DB"/>
-    <ellipse cx="0" cy="0" rx="40" ry="35" fill="#2c3e50"/>
-  </g>
-  <rect x="106" y="340" width="300" height="60" fill="#3498DB" rx="8"/>
+  <circle cx="256" cy="256" r="160" fill="none" stroke="#ecf0f1" stroke-width="12"/>
+  <circle cx="256" cy="256" r="70" fill="none" stroke="#bdc3c7" stroke-width="10"/>
+  <path d="M 326 256 L 416 256" stroke="#e74c3c" stroke-width="8"/>
+  <path d="M 390 256 L 370 236 L 370 276 Z" fill="#e74c3c"/>
+  <text x="256" y="380" font-size="42" fill="white" text-anchor="middle" font-family="Arial" font-weight="bold">ROLL CALC</text>
 </svg>
