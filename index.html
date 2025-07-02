@@ -29,9 +29,19 @@
             color: white;
             padding: 10px 15px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+        
+        .header-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-end;
         }
         
         h1 {
@@ -59,9 +69,27 @@
             transition: all 0.3s ease;
         }
         
-        .lang-btn.active {
-            background: white;
-            color: #2c3e50;
+        .reset-btn {
+            background: #e74c3c;
+            border: none;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .reset-btn:hover {
+            background: #c0392b;
+        }
+        
+        .reset-btn:active {
+            transform: scale(0.95);
         }
         
         .container {
@@ -253,6 +281,16 @@
         }
         
         @media (max-width: 380px) {
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+            
+            .header-controls {
+                align-items: center;
+            }
+            
             .input-layout {
                 flex-direction: column;
             }
@@ -272,10 +310,22 @@
 </head>
 <body>
     <header>
-        <h1 class="lang-text" data-ja="ロール巻き計算機" data-vi="Máy tính mét cuộn">Máy tính mét cuộn</h1>
-        <div class="language-switch">
-            <button class="lang-btn" onclick="setLanguage('ja')">日本語</button>
-            <button class="lang-btn active" onclick="setLanguage('vi')">Tiếng Việt</button>
+        <div class="header-content">
+            <h1 class="lang-text" data-ja="ロール巻き計算機" data-vi="Máy tính mét cuộn">Máy tính mét cuộn</h1>
+            <div class="header-controls">
+                <div class="language-switch">
+                    <button class="lang-btn" onclick="setLanguage('ja')">日本語</button>
+                    <button class="lang-btn active" onclick="setLanguage('vi')">Tiếng Việt</button>
+                </div>
+                <button class="reset-btn lang-text" onclick="resetInputs()" 
+                        data-ja="リセット" data-vi="Đặt lại">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-9 9"></path>
+                        <path d="M3 3v6h6"></path>
+                    </svg>
+                    <span>Đặt lại</span>
+                </button>
+            </div>
         </div>
     </header>
     
@@ -290,7 +340,7 @@
                             <!-- コア -->
                             <circle cx="100" cy="100" r="30" class="core-fill"/>
                             
-                            <!-- D寸法線 -->
+                            <!-- D寸法線（Aに変更） -->
                             <line x1="130" y1="100" x2="180" y2="100" class="dimension-line"/>
                             <line x1="130" y1="95" x2="130" y2="105" class="dimension-line"/>
                             <line x1="180" y1="95" x2="180" y2="105" class="dimension-line"/>
@@ -381,9 +431,33 @@
             document.querySelectorAll('.lang-text').forEach(element => {
                 const text = element.getAttribute(`data-${lang}`);
                 if (text) {
-                    element.textContent = text;
+                    // リセットボタンのテキストを更新
+                    if (element.classList.contains('reset-btn')) {
+                        element.querySelector('span').textContent = text;
+                    } else {
+                        element.textContent = text;
+                    }
                 }
             });
+        }
+        
+        function resetInputs() {
+            // すべての入力欄をクリア
+            document.getElementById('D').value = '';
+            document.getElementById('d').value = '';
+            document.getElementById('T').value = '';
+            
+            // エラーメッセージを非表示
+            document.querySelectorAll('.error').forEach(e => {
+                e.style.display = 'none';
+                e.textContent = '';
+            });
+            
+            // 結果を非表示
+            document.getElementById('result').classList.remove('show');
+            
+            // 最初の入力欄にフォーカス
+            document.getElementById('D').focus();
         }
         
         function showError(inputId, messageKey) {
