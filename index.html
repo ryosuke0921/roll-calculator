@@ -150,6 +150,14 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             text-align: center;
+            -moz-appearance: textfield; /* Firefox */
+        }
+        
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
         
         input:focus {
@@ -288,7 +296,7 @@
                             <line x1="180" y1="95" x2="180" y2="105" class="dimension-line"/>
                             <path d="M 135 100 L 140 95 L 140 105 Z" class="dimension-arrow"/>
                             <path d="M 175 100 L 170 95 L 170 105 Z" class="dimension-arrow"/>
-                            <text x="155" y="90" style="font-size: 14px; fill: #e74c3c; font-weight: bold; text-anchor: middle;">D</text>
+                            <text x="155" y="90" style="font-size: 14px; fill: #e74c3c; font-weight: bold; text-anchor: middle;">A</text>
                             
                             <!-- d寸法線 -->
                             <line x1="70" y1="150" x2="130" y2="150" stroke="#3498db" stroke-width="2" fill="none"/>
@@ -307,9 +315,9 @@
                 
                 <div class="inputs-wrapper">
                     <div class="input-group d-group">
-                        <span class="input-label" style="color: #e74c3c;">D:</span>
+                        <span class="input-label" style="color: #e74c3c;">A:</span>
                         <div class="input-wrapper">
-                            <input type="number" id="D" placeholder="62" step="0.1" inputmode="decimal">
+                            <input type="number" id="D" placeholder="" step="0.1" inputmode="decimal">
                             <span class="unit">mm</span>
                         </div>
                         <span class="input-description lang-text" data-ja="巻き厚さ" data-vi="Độ dày cuộn">Độ dày cuộn</span>
@@ -319,7 +327,7 @@
                     <div class="input-group core-group">
                         <span class="input-label" style="color: #3498db;">d:</span>
                         <div class="input-wrapper">
-                            <input type="number" id="d" placeholder="76" step="0.1" inputmode="decimal">
+                            <input type="number" id="d" placeholder="" step="0.1" inputmode="decimal">
                             <span class="unit">mm</span>
                         </div>
                         <span class="input-description lang-text" data-ja="コア外径" data-vi="Đường kính lõi">Đường kính lõi</span>
@@ -329,7 +337,7 @@
                     <div class="input-group t-group">
                         <span class="input-label" style="color: #95a5a6;">T:</span>
                         <div class="input-wrapper">
-                            <input type="number" id="T" placeholder="0.025" step="0.001" inputmode="decimal">
+                            <input type="number" id="T" placeholder="" step="0.001" inputmode="decimal">
                             <span class="unit">mm</span>
                         </div>
                         <span class="input-description lang-text" data-ja="フィルム厚" data-vi="Độ dày phim">Độ dày phim</span>
@@ -417,7 +425,7 @@
             }
             
             // 計算実行（新しい簡潔な式）
-            // M = ((d+D)*D*π)/T をmmからmに変換
+            // M = ((d+A)*A*π)/T をmmからmに変換（D→A）
             const M_mm = ((d + D) * D * Math.PI) / T;
             const M = M_mm / 1000;
             
