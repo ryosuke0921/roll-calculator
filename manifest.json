@@ -8,34 +8,11 @@
   "background_color": "#f0f2f5",
   "theme_color": "#2c3e50",
   "orientation": "portrait",
-  "launch_handler": {
-    "client_mode": "navigate-new"
-  },
-  "screenshots": [
-    {
-      "src": "screenshot1.png",
-      "sizes": "540x720",
-      "type": "image/png"
-    }
-  ],
   "icons": [
     {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-512.png",
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIGZpbGw9IiMyYzNlNTAiIHJ4PSI1MCIvPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NiwgMjIwKSI+CiAgICA8ZWxsaXBzZSBjeD0iMCIgY3k9IjAiIHJ4PSIxMjAiIHJ5PSIxMDAiIGZpbGw9IiMzNDk4REIiLz4KICAgIDxlbGxpcHNlIGN4PSIwIiBjeT0iMCIgcng9IjQwIiByeT0iMzUiIGZpbGw9IiMyYzNlNTAiLz4KICA8L2c+CiAgPHJlY3QgeD0iMTA2IiB5PSIzNDAiIHdpZHRoPSIzMDAiIGhlaWdodD0iNjAiIGZpbGw9IiMzNDk4REIiIHJ4PSI4Ii8+Cjwvc3ZnPg==",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-maskable-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/svg+xml"
     }
   ]
 }
