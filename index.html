@@ -523,8 +523,23 @@
         
         // Service Worker登録（PWA対応）
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+            navigator.serviceWorker.register('./sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registration successful');
+                })
+                .catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
         }
+        
+        // オフライン状態の検出
+        window.addEventListener('online', () => {
+            console.log('オンラインになりました');
+        });
+        
+        window.addEventListener('offline', () => {
+            console.log('オフラインになりました');
+        });
     </script>
 </body>
 </html>
